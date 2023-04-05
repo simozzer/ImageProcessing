@@ -44,8 +44,6 @@ var
 
 implementation
 
-uses
-  LazLogger, unEdgeStats;
 
 {$R *.lfm}
 
