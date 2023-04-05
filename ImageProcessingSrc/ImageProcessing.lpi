@@ -41,11 +41,6 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frmImageProcess"/>
       </Unit>
-      <Unit>
-        <Filename Value="unedgestats.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="unEdgeStats"/>
-      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
