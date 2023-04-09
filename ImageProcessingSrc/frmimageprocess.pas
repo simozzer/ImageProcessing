@@ -44,8 +44,6 @@ var
 
 implementation
 
-uses
-  LazLogger, unEdgeStats;
 
 {$R *.lfm}
 
@@ -171,7 +169,7 @@ begin
 
         dConvColor := Sqrt((dConvColorX  * dConvColorX) + (dConvColorY * dConvColorY));
 
-        avg := Round(dConvColor);;
+        avg := Round(dConvColor);
         targetLine^[x].R := avg;
         targetLine^[x].G := avg;
         targetLine^[x].B := avg;
