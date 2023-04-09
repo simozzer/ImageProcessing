@@ -42,6 +42,16 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frmImageProcess"/>
       </Unit>
+      <Unit>
+        <Filename Value="unthreadrotation.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="unThreadRotation"/>
+      </Unit>
+      <Unit>
+        <Filename Value="unsiimageprocessingtypes.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="unSiImageProcessingTypes"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
