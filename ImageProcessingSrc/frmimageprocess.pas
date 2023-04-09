@@ -16,12 +16,14 @@ type
     actGrayScale: TAction;
     actBlur: TAction;
     actEdge: TAction;
+    actToggleRotation: TAction;
+    actRotate: TAction;
     ActionList1: TActionList;
     btnGrayscale: TButton;
     btnOpenImage: TButton;
     btnBlur: TButton;
     btnEdgeDetection: TButton;
-    btnR: TButton;
+    btnToggleRotation: TButton;
     btnRotateOrig: TButton;
     Image1: TImage;
     ImageList1: TImageList;
@@ -31,15 +33,16 @@ type
     procedure actBlurExecute(Sender: TObject);
     procedure actEdgeExecute(Sender: TObject);
     procedure actGrayScaleExecute(Sender: TObject);
+    procedure actRotateExecute(Sender: TObject);
+    procedure actToggleRotationExecute(Sender: TObject);
     procedure btnOpenImageClick(Sender: TObject);
-    procedure btnRClick(Sender: TObject);
-    procedure btnRotateOrigClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
   private
-    FiOrigBitmap : TBitmap;
-    FdRotation : Double;
+    FOrigBitmap: TBitmap;
+    FdRotation: double;
   public
     procedure AfterConstruction; override;
+    destructor Destroy; override;
 
   end;
 
@@ -58,7 +61,7 @@ var
 implementation
 
 uses
-  LazLogger, unEdgeStats, Types;
+  Types;
 
 {$R *.lfm}
 
@@ -69,38 +72,123 @@ uses
 
 procedure TForm1.actGrayScaleExecute(Sender: TObject);
 var
-  x, y, avg: integer;
+  iX, iY, iAvg: integer;
   AImageBitmap: TBitmap;
-  Line: PRGBTripleArray;
+  pLine: PRGBTripleArray;
 begin
 
   AImageBitmap := Image1.Picture.Bitmap;
-  for y := 1 to Image1.Picture.Height - 2 do
+  for iY := 1 to Image1.Picture.Height - 2 do
   begin
-    Line := PRGBTripleArray(AImageBitmap.ScanLine[y]);
-    for x := 1 to Image1.Picture.Width - 2 do
+    pLine := PRGBTripleArray(AImageBitmap.ScanLine[iY]);
+    for iX := 1 to Image1.Picture.Width - 2 do
     begin
-      avg := (Line^[x].r + Line^[x].g + Line^[x].b) div 3;
-
-      Line^[x].r := avg;
-      Line^[x].G := avg;
-      Line^[X].B := avg;
-
+      iAvg := (pLine^[iX].R + pLine^[iX].G + pLine^[iX].B) div 3;
+      pLine^[iX].R := iAvg;
+      pLine^[iX].G := iAvg;
+      pLine^[iX].B := iAvg;
     end;
   end;
-  FiOrigBitmap.Assign(Image1.Picture.Bitmap);
+  FOrigBitmap.Assign(AImageBitmap);
+  Image1.Canvas.Draw(0,0,AImageBitmap);
 
+end;
+
+procedure TForm1.actRotateExecute(Sender: TObject);
+var
+  iX, iY, iCenterX, iCenterY, iTargetX, iTargetY, iDeltaX, iDeltaY: integer;
+  ABitmap, ASourceBitmap: TBitmap;
+  pSourceLine, pTargetLine: PRGBTripleArray;
+  dRadius, dAngle: double;
+const
+  ROTATION = 0.03;
+begin
+  FdRotation := FdRotation + ROTATION;
+  ASourceBitmap := FOrigBitmap;
+  iCenterX := ASourceBitmap.Width div 2;
+  iCenterY := ASourceBitmap.Height div 2;
+  ABitmap := TBitmap.Create;
+  ABitmap.Width := ASourceBitmap.Width;
+  ABitmap.Height := ASourceBitmap.Height;
+  ABitmap.PixelFormat := ASourceBitmap.PixelFormat;
+  try
+    for iY := 0 to pred(ASourceBitmap.Height) do
+    begin
+      pSourceLine := ASourceBitmap.ScanLine[iY];
+      for iX := 0 to pred(ASourceBitmap.Width) do
+      begin
+        iDeltaX := iX - iCenterX;
+        iDeltaY := iY - iCenterY;
+        dRadius := Sqrt(sqr(iDeltaX) + Sqr(iDeltaY));
+
+        if (iDeltaX = 0) then
+        begin
+          if (iDeltaY < 0) then
+            dAngle := -pi / 2
+          else if (iDeltaY > 0) then
+            dAngle := pi / 2;
+        end
+        else if (iDeltaY = 0) then
+        begin
+          if (iDeltaX < 0) then
+            dAngle := 0
+          else if (iDeltaX > 0) then
+            dAngle := pi;
+        end
+        else if (iDeltaX < 0) and (iDeltaY < 0) then
+          dAngle := pi + ArcTan(iDeltaY / iDeltaX)
+        else if (iDeltaX > 0) and (iDeltaY < 0) then
+          dAngle := -((pi / 2) + ArcTan(iDeltaX / iDeltaY))
+        else if (iDeltaX < 0) and (iDeltaY > 0) then
+          dAngle := pi + ArcTan(iDeltaY / iDeltaX)
+        else if (iDeltax > 0) and (iDeltaY > 0) then
+          dAngle := ArcTan(iDeltaY / iDeltax);
+
+        iTargetX := Round(dRadius * cos(dAngle + FdRotation)) + iCenterX;
+        iTargetY := Round(dRadius * sin(dAngle + FdRotation)) + iCenterY;
+
+
+        if PtInRect(Rect(0, 0, ABitmap.Width, ABitmap.Height),
+          Point(round(iTargetX), round(iTargetY))) then
+        begin
+          pTargetLine := ABitmap.ScanLine[round(iTargetY)];
+          pTargetLine^[round(iTargetX)].R := pSourceLine^[iX].R;
+          pTargetLine^[round(iTargetX)].G := pSourceLine^[iX].G;
+          pTargetLine^[round(iTargetX)].B := pSourceLine^[iX].B;
+        end;
+
+      end;
+    end;
+    Image1.Picture.Pixmap.Canvas.Draw(0, 0, ABitmap);
+  finally
+    ABitmap.Free;
+  end;
+
+end;
+
+procedure TForm1.actToggleRotationExecute(Sender: TObject);
+begin
+  if not timer1.Enabled then
+  begin
+    Timer1.enabled := true;
+    TAction(Sender).Caption := 'Stop Rotation';
+  end
+  else
+  begin
+    Timer1.enabled := False;
+    TAction(Sender).Caption := 'Start Rotation';
+  end;
 end;
 
 
 
 procedure TForm1.actBlurExecute(Sender: TObject);
 var
-  x, y, avg: integer;
+  iX, iY, iAvg: integer;
   dConvColor: double;
   ABitmap: TBitmap;
   AImageBitmap: TBitmap;
-  thisLine, priorLine, nextLine, targetLine: PRGBTripleArray;
+  pThisLine, pPriorLine, pNextLine, pTargetLine: PRGBTripleArray;
 begin
   ABitmap := TBitmap.Create;
   ABitmap.Width := Image1.Picture.Width;
@@ -108,33 +196,33 @@ begin
   ABitmap.PixelFormat := Image1.Picture.Bitmap.PixelFormat;
   try
     AImageBitmap := Image1.Picture.Bitmap;
-    for y := 1 to Image1.Picture.Height - 2 do
+    for iY := 1 to Image1.Picture.Height - 2 do
     begin
 
-      thisLine := PRGBTripleArray(AImageBitmap.ScanLine[y]);
-      priorLine := PRGBTripleArray(AImageBitmap.ScanLine[y - 1]);
-      nextLine := PRGBTripleArray(AImageBitmap.ScanLine[y + 1]);
+      pThisLine := PRGBTripleArray(AImageBitmap.ScanLine[iY]);
+      pPriorLine := PRGBTripleArray(AImageBitmap.ScanLine[iY - 1]);
+      pNextLine := PRGBTripleArray(AImageBitmap.ScanLine[iY + 1]);
 
-      targetLine := PRGBTripleArray(ABitmap.ScanLine[y]);
-      for x := 1 to Image1.Picture.Width - 2 do
+      pTargetLine := PRGBTripleArray(ABitmap.ScanLine[iY]);
+      for iX := 1 to Image1.Picture.Width - 2 do
       begin
 
-        dConvColor := (priorLine^[x - 1].R * 0.1) + (priorLine^[x].R * 0.1) +
-          (priorLine^[x + 1].R * 0.1) + (thisLine^[x - 1].R * 0.1) +
-          (thisLine^[x].R * 0.2) + (thisLine^[x + 1].R * 0.1) +
-          (nextLine^[x - 1].R * 0.1) + (nextLine^[x].R * 0.1) +
-          (nextLine^[x + 1].R * 0.1);
+        dConvColor := (pPriorLine^[iX - 1].R * 0.1) + (pPriorLine^[iX].R * 0.1) +
+          (pPriorLine^[iX + 1].R * 0.1) + (pThisLine^[iX - 1].R * 0.1) +
+          (pThisLine^[iX].R * 0.2) + (pThisLine^[iX + 1].R * 0.1) +
+          (pNextLine^[iX - 1].R * 0.1) + (pNextLine^[iX].R * 0.1) +
+          (pNextLine^[iX + 1].R * 0.1);
 
-        avg := Round(dConvColor);
-        targetLine^[x].R := avg;
-        targetLine^[x].G := avg;
-        targetLine^[x].B := avg;
+        iAvg := Round(dConvColor);
+        pTargetLine^[iX].R := iAvg;
+        pTargetLine^[iX].G := iAvg;
+        pTargetLine^[iX].B := iAvg;
 
       end;
     end;
     Image1.Picture.Pixmap.Canvas.Draw(0, 0, ABitmap);
     Image1.Refresh;
-    FiOrigBitmap.Assign(Image1.Picture.Bitmap);
+    FOrigBitmap.Assign(Image1.Picture.Bitmap);
   finally
     ABitmap.Free;
   end;
@@ -142,11 +230,11 @@ end;
 
 procedure TForm1.actEdgeExecute(Sender: TObject);
 var
-  x, y, avg: integer;
+  iX, iY, iAvg: integer;
   dConvColorX, dConvColorY, dConvColor: double;
   ABitmap: TBitmap;
   AImageBitmap: TBitmap;
-  thisLine, priorLine, nextLine, targetLine: PRGBTripleArray;
+  pThisLine, pPriorLine, pNextLine, pTargetLine: PRGBTripleArray;
 begin
   ABitmap := TBitmap.Create;
   ABitmap.Width := Image1.Picture.Width;
@@ -155,38 +243,38 @@ begin
 
   try
     AImageBitmap := Image1.Picture.Bitmap;
-    for y := 1 to Image1.Picture.Height - 2 do
+    for iY := 1 to Image1.Picture.Height - 2 do
     begin
 
-      thisLine := PRGBTripleArray(AImageBitmap.ScanLine[y]);
-      priorLine := PRGBTripleArray(AImageBitmap.ScanLine[y - 1]);
-      nextLine := PRGBTripleArray(AImageBitmap.ScanLine[y + 1]);
+      pThisLine := PRGBTripleArray(AImageBitmap.ScanLine[iY]);
+      pPriorLine := PRGBTripleArray(AImageBitmap.ScanLine[iY - 1]);
+      pNextLine := PRGBTripleArray(AImageBitmap.ScanLine[iY + 1]);
 
-      targetLine := PRGBTripleArray(ABitmap.ScanLine[y]);
-      for x := 1 to Image1.Picture.Width - 2 do
+      pTargetLine := PRGBTripleArray(ABitmap.ScanLine[iY]);
+      for iX := 1 to Image1.Picture.Width - 2 do
       begin
 
-        dConvColorX := (priorLine^[x - 1].R * 1) + (priorLine^[x + 1].R * -1) +
-          (thisLine^[x - 1].R * 2) + (thisLine^[x + 1].R * -2) +
-          (nextLine^[x - 1].R * 1) + (nextLine^[x + 1].R * -1);
+        dConvColorX := (pPriorLine^[iX - 1].R * 1) + (pPriorLine^[iX + 1].R * -1) +
+          (pThisLine^[iX - 1].R * 2) + (pThisLine^[iX + 1].R * -2) +
+          (pNextLine^[iX - 1].R * 1) + (pNextLine^[iX + 1].R * -1);
 
-        dConvColorY := (priorLine^[x - 1].R) + (priorLine^[x].R * 2) +
-          (priorLine^[x + 1].R) + (nextLine^[x - 1].R * -1) +
-          (nextLine^[x].R * -2) + (nextLine^[x + 1].R * -1);
+        dConvColorY := (pPriorLine^[iX - 1].R) + (pPriorLine^[iX].R * 2) +
+          (pPriorLine^[iX + 1].R) + (pNextLine^[iX - 1].R * -1) +
+          (pNextLine^[iX].R * -2) + (pNextLine^[iX + 1].R * -1);
 
         dConvColor := Sqrt((dConvColorX * dConvColorX) + (dConvColorY * dConvColorY));
 
-        avg := Round(dConvColor);
-        ;
-        targetLine^[x].R := avg;
-        targetLine^[x].G := avg;
-        targetLine^[x].B := avg;
+        iAvg := Round(dConvColor);
+
+        pTargetLine^[iX].R := iAvg;
+        pTargetLine^[iX].G := iAvg;
+        pTargetLine^[iX].B := iAvg;
 
       end;
     end;
     Image1.Picture.Pixmap.Canvas.Draw(0, 0, ABitmap);
     Image1.Refresh;
-    FiOrigBitmap.Assign(Image1.Picture.Bitmap);
+    FOrigBitmap.Assign(Image1.Picture.Bitmap);
   finally
     ABitmap.Free;
   end;
@@ -198,102 +286,26 @@ begin
   if OpenPictureDialog1.Execute then
   begin
     Image1.Picture.LoadFromFile(OpenPictureDialog1.FileName);
+    FOrigBitmap.Assign(Image1.Picture.Bitmap);
   end;
 end;
 
-procedure TForm1.btnRClick(Sender: TObject);
-begin
-    Timer1.Enabled := not Timer1.Enabled;
-end;
-
-
-
-procedure TForm1.btnRotateOrigClick(Sender: TObject);
-var
-  X, Y: integer;
-  ABitmap, ASourceBitmap: TBitmap;
-  sourceLine, targetLine: PRGBTripleArray;
-  targetX, targetY, CentreX, CentreY,deltaX, deltaY : double;
-  radius, angle: double;
-const
-  ROTATION = 0.03;
-begin
-  FdRotation := FdRotation + ROTATION;
-  ASourceBitmap := FiOrigBitmap;
-  CentreX := ASourceBitmap.Width / 2;
-  CentreY := ASourceBitmap.Height / 2;
-  ABitmap := TBitmap.Create;
-  ABitmap.Width := ASourceBitmap.Width;
-  ABitmap.Height := ASourceBitmap.Height;
-  ABitmap.PixelFormat := ASourceBitmap.PixelFormat;
-  try
-    for Y := 0 to pred(ASourceBitmap.Height) do
-    begin
-      sourceLine := ASourceBitmap.ScanLine[y];
-      for X := 0 to pred(ASourceBitmap.Width) do
-      begin
-        deltaX := Double(X) - CentreX;
-        deltaY := double(Y) - CentreY;
-        radius := Sqrt(sqr(deltaX) + Sqr(deltaY));
-
-        if (DeltaX < 0) AND (deltaY <0)then
-        begin
-          angle := ArcTan(deltaY / deltaX);
-          targetX := -(radius * cos(angle + FdRotation)) + CentreX;
-          targetY := -(radius * sin(angle + FdRotation)) + CentreY;
-        end
-        else if (deltaX > 0) AND (deltaY <0) then
-          begin
-             angle :=- ((pi/2) +  ArcTan(deltax / deltaY));
-             targetX := (radius * cos(angle + FdRotation)) + CentreX;
-             targetY := (radius * sin(angle + FdRotation)) + CentreY;
-          end
-
-      else if (deltaX < 0) AND (deltaY > 0) then
-      begin
-
-             angle := ArcTan(deltax / deltaY);
-             targetX := (radius * sin(angle- FdRotation)) + CentreX;
-             targetY := (radius * cos(angle - FdRotation)) + CentreY;
-
-      end
-      else if (deltax >0) AND (deltaY > 0) then
-      begin
-        angle := ArcTan(deltax / deltaY);
-             targetX := (radius * sin(angle- FdRotation)) + CentreX;
-             targetY := (radius * cos(angle - FdRotation)) + CentreY;
-      end;
-
-
-
-          if PtInRect(Rect(0, 0, ABitmap.Width, ABitmap.Height),
-            Point(round(targetX), round(targetY))) then
-          begin
-            targetLine := ABitmap.ScanLine[round(targetY)];
-            targetLine^[round(targetX)].R := sourceLine^[x].R;
-            targetLine^[round(targetX)].G := sourceLine^[x].G;
-            targetLine^[round(targetX)].B := sourceLine^[x].B;
-          end;
-
-
-      end;
-    end;
-    Image1.Picture.Pixmap.Canvas.Draw(0, 0, ABitmap);
-  finally
-    ABitmap.Free;
-  end;
-
-end;
 
 procedure TForm1.FormCreate(Sender: TObject);
 begin
-  FiOrigBitmap := TBitmap.Create;
+  FOrigBitmap := TBitmap.Create;
 end;
 
 procedure TForm1.AfterConstruction;
 begin
   inherited AfterConstruction;
-  FiOrigBitmap.Assign(Image1.Picture.Bitmap);
+  FOrigBitmap.Assign(Image1.Picture.Bitmap);
+end;
+
+destructor TForm1.Destroy;
+begin
+   FOrigBitmap.Free;
+   inherited Destroy;
 end;
 
 
