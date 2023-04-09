@@ -2510,6 +2510,14 @@ object Form1: TForm1
       Action = actRotate
       TabOrder = 5
     end
+    object btnRotatePlus: TButton
+      Left = 560
+      Height = 25
+      Top = 16
+      Width = 75
+      Action = actRotatePlus
+      TabOrder = 6
+    end
   end
   object OpenPictureDialog1: TOpenPictureDialog
     Left = 520
@@ -2537,6 +2545,10 @@ object Form1: TForm1
     object actToggleRotation: TAction
       Caption = 'Start Rotation'
       OnExecute = actToggleRotationExecute
+    end
+    object actRotatePlus: TAction
+      Caption = 'Rotate+'
+      OnExecute = actRotatePlusExecute
     end
   end
   object ImageList1: TImageList

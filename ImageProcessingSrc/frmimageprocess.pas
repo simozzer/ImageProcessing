@@ -16,6 +16,7 @@ type
     actGrayScale: TAction;
     actBlur: TAction;
     actEdge: TAction;
+    actRotatePlus: TAction;
     actToggleRotation: TAction;
     actRotate: TAction;
     ActionList1: TActionList;
@@ -25,6 +26,7 @@ type
     btnEdgeDetection: TButton;
     btnToggleRotation: TButton;
     btnRotateOrig: TButton;
+    btnRotatePlus: TButton;
     Image1: TImage;
     ImageList1: TImageList;
     OpenPictureDialog1: TOpenPictureDialog;
@@ -34,6 +36,7 @@ type
     procedure actEdgeExecute(Sender: TObject);
     procedure actGrayScaleExecute(Sender: TObject);
     procedure actRotateExecute(Sender: TObject);
+    procedure actRotatePlusExecute(Sender: TObject);
     procedure actToggleRotationExecute(Sender: TObject);
     procedure btnOpenImageClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -90,7 +93,7 @@ begin
     end;
   end;
   FOrigBitmap.Assign(AImageBitmap);
-  Image1.Canvas.Draw(0,0,AImageBitmap);
+  Image1.Canvas.Draw(0, 0, AImageBitmap);
 
 end;
 
@@ -166,16 +169,88 @@ begin
 
 end;
 
+procedure TForm1.actRotatePlusExecute(Sender: TObject);
+var
+  iX, iY, iCenterX, iCenterY, iSourceX, iSourceY, iDeltaX, iDeltaY: integer;
+  ABitmap, ASourceBitmap: TBitmap;
+  pSourceLine, pTargetLine: PRGBTripleArray;
+  dRadius, dAngle: double;
+const
+  ROTATION = 0.03;
+begin
+  FdRotation := FdRotation + ROTATION;
+  ASourceBitmap := FOrigBitmap;
+  iCenterX := ASourceBitmap.Width div 2;
+  iCenterY := ASourceBitmap.Height div 2;
+  ABitmap := TBitmap.Create;
+  ABitmap.Width := ASourceBitmap.Width;
+  ABitmap.Height := ASourceBitmap.Height;
+  ABitmap.PixelFormat := ASourceBitmap.PixelFormat;
+  try
+    for iY := 0 to pred(ASourceBitmap.Height) do
+    begin
+      pTargetLine := ABitmap.ScanLine[iY];
+      for iX := 0 to pred(ASourceBitmap.Width) do
+      begin
+        iDeltaX := iX - iCenterX;
+        iDeltaY := iY - iCenterY;
+        dRadius := Sqrt(sqr(iDeltaX) + Sqr(iDeltaY));
+
+        if (iDeltaX = 0) then
+        begin
+          if (iDeltaY < 0) then
+            dAngle := -pi / 2
+          else if (iDeltaY > 0) then
+            dAngle := pi / 2;
+        end
+        else if (iDeltaY = 0) then
+        begin
+          if (iDeltaX < 0) then
+            dAngle := 0
+          else if (iDeltaX > 0) then
+            dAngle := pi;
+        end
+        else if (iDeltaX < 0) and (iDeltaY < 0) then
+          dAngle := pi + ArcTan(iDeltaY / iDeltaX)
+        else if (iDeltaX > 0) and (iDeltaY < 0) then
+          dAngle := -((pi / 2) + ArcTan(iDeltaX / iDeltaY))
+        else if (iDeltaX < 0) and (iDeltaY > 0) then
+          dAngle := pi + ArcTan(iDeltaY / iDeltaX)
+        else if (iDeltax > 0) and (iDeltaY > 0) then
+          dAngle := ArcTan(iDeltaY / iDeltax);
+
+        iSourceX := Round(dRadius * cos(dAngle - FdRotation)) + iCenterX;
+        iSourceY := Round(dRadius * sin(dAngle - FdRotation)) + iCenterY;
+
+
+        if PtInRect(Rect(0, 0, ABitmap.Width, ABitmap.Height),
+          Point(round(iSourceX), round(iSourceY))) then
+        begin
+          pSourceLine := ASourceBitmap.ScanLine[round(iSourceY)];
+          pTargetLine^[round(iX)].R := pSourceLine^[iSourceX].R;
+          pTargetLine^[round(iX)].G := pSourceLine^[iSourceX].G;
+          pTargetLine^[round(iX)].B := pSourceLine^[iSourceX].B;
+        end;
+
+      end;
+    end;
+    Image1.Picture.Pixmap.Canvas.Draw(0, 0, ABitmap);
+  finally
+    ABitmap.Free;
+  end;
+
+end;
+
 procedure TForm1.actToggleRotationExecute(Sender: TObject);
 begin
   if not timer1.Enabled then
   begin
-    Timer1.enabled := true;
+    Timer1.Enabled := True;
     TAction(Sender).Caption := 'Stop Rotation';
   end
   else
   begin
-    Timer1.enabled := False;
+    Timer1.Enabled := False;
     TAction(Sender).Caption := 'Start Rotation';
   end;
 end;
@@ -304,8 +379,8 @@ end;
 
 destructor TForm1.Destroy;
 begin
-   FOrigBitmap.Free;
-   inherited Destroy;
+  FOrigBitmap.Free;
+  inherited Destroy;
 end;
 
 
