@@ -2458,7 +2458,7 @@ object Form1: TForm1
     Align = alBottom
     ClientHeight = 50
     ClientWidth = 859
-    Color = clMenu
+    Color = clInfoBk
     ParentColor = False
     TabOrder = 0
     object btnOpenImage: TButton
@@ -2494,22 +2494,20 @@ object Form1: TForm1
       Action = actEdge
       TabOrder = 3
     end
-    object btnR: TButton
-      Left = 360
+    object btnToggleRotation: TButton
+      Left = 456
       Height = 25
       Top = 16
-      Width = 75
-      Caption = 'R'
-      OnClick = btnRClick
+      Width = 91
+      Action = actToggleRotation
       TabOrder = 4
     end
     object btnRotateOrig: TButton
-      Left = 440
+      Left = 368
       Height = 25
       Top = 16
       Width = 75
-      Caption = 'Rotate Orig'
-      OnClick = btnRotateOrigClick
+      Action = actRotate
       TabOrder = 5
     end
   end
@@ -2532,6 +2530,14 @@ object Form1: TForm1
       Caption = 'Edge'
       OnExecute = actEdgeExecute
     end
+    object actRotate: TAction
+      Caption = 'Rotate'
+      OnExecute = actRotateExecute
+    end
+    object actToggleRotation: TAction
+      Caption = 'Start Rotation'
+      OnExecute = actToggleRotationExecute
+    end
   end
   object ImageList1: TImageList
     Left = 104
@@ -2540,7 +2546,7 @@ object Form1: TForm1
   object Timer1: TTimer
     Enabled = False
     Interval = 50
-    OnTimer = btnRotateOrigClick
+    OnTimer = actRotateExecute
     Left = 560
     Top = 298
   end
