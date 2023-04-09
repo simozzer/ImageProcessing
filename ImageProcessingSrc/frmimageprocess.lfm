@@ -1,17 +1,18 @@
 object Form1: TForm1
-  Left = 646
-  Height = 582
-  Top = 145
-  Width = 632
+  Left = 606
+  Height = 629
+  Top = 102
+  Width = 859
   Caption = 'Form1'
-  ClientHeight = 582
-  ClientWidth = 632
+  ClientHeight = 629
+  ClientWidth = 859
+  OnCreate = FormCreate
   LCLVersion = '2.2.4.0'
   object Image1: TImage
     Left = 0
-    Height = 532
+    Height = 579
     Top = 0
-    Width = 632
+    Width = 859
     Align = alClient
     Picture.Data = {
       0A544A706567496D616765FC2F0100FFD8FFE000104A46494600010100000100
@@ -2452,11 +2453,11 @@ object Form1: TForm1
   object pnlButtons: TPanel
     Left = 0
     Height = 50
-    Top = 532
-    Width = 632
+    Top = 579
+    Width = 859
     Align = alBottom
     ClientHeight = 50
-    ClientWidth = 632
+    ClientWidth = 859
     Color = clMenu
     ParentColor = False
     TabOrder = 0
@@ -2474,8 +2475,7 @@ object Form1: TForm1
       Height = 25
       Top = 16
       Width = 75
-      Caption = 'Grayscale'
-      OnClick = btnGrayscaleClick
+      Action = actGrayScale
       TabOrder = 1
     end
     object btnBlur: TButton
@@ -2483,8 +2483,7 @@ object Form1: TForm1
       Height = 25
       Top = 16
       Width = 75
-      Caption = 'Blur'
-      OnClick = btnBlurClick
+      Action = actBlur
       TabOrder = 2
     end
     object btnEdgeDetection: TButton
@@ -2492,13 +2491,57 @@ object Form1: TForm1
       Height = 25
       Top = 16
       Width = 75
-      Caption = 'Edge'
-      OnClick = btnEdgeDetectionClick
+      Action = actEdge
       TabOrder = 3
+    end
+    object btnR: TButton
+      Left = 360
+      Height = 25
+      Top = 16
+      Width = 75
+      Caption = 'R'
+      OnClick = btnRClick
+      TabOrder = 4
+    end
+    object btnRotateOrig: TButton
+      Left = 440
+      Height = 25
+      Top = 16
+      Width = 75
+      Caption = 'Rotate Orig'
+      OnClick = btnRotateOrigClick
+      TabOrder = 5
     end
   end
   object OpenPictureDialog1: TOpenPictureDialog
     Left = 520
     Top = 130
+  end
+  object ActionList1: TActionList
+    Left = 106
+    Top = 164
+    object actGrayScale: TAction
+      Caption = 'GrayScale'
+      OnExecute = actGrayScaleExecute
+    end
+    object actBlur: TAction
+      Caption = 'Blur'
+      OnExecute = actBlurExecute
+    end
+    object actEdge: TAction
+      Caption = 'Edge'
+      OnExecute = actEdgeExecute
+    end
+  end
+  object ImageList1: TImageList
+    Left = 104
+    Top = 224
+  end
+  object Timer1: TTimer
+    Enabled = False
+    Interval = 50
+    OnTimer = btnRotateOrigClick
+    Left = 560
+    Top = 298
   end
 end
