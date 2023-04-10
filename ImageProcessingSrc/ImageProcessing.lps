@@ -8,9 +8,9 @@
       <Unit>
         <Filename Value="ImageProcessing.lpr"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="3"/>
-        <CursorPos X="42" Y="20"/>
-        <UsageCount Value="34"/>
+        <EditorIndex Value="4"/>
+        <CursorPos X="36" Y="20"/>
+        <UsageCount Value="64"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -21,9 +21,9 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frmImageProcess"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="82"/>
-        <CursorPos X="45" Y="101"/>
-        <UsageCount Value="34"/>
+        <TopLine Value="130"/>
+        <CursorPos X="57" Y="183"/>
+        <UsageCount Value="64"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
@@ -31,19 +31,30 @@
         <Filename Value="unthreadrotation.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="unThreadRotation"/>
-        <EditorIndex Value="2"/>
-        <TopLine Value="71"/>
-        <CursorPos X="53" Y="94"/>
-        <UsageCount Value="25"/>
+        <EditorIndex Value="3"/>
+        <TopLine Value="72"/>
+        <CursorPos X="52" Y="81"/>
+        <FoldState Value=" T0iE85Q"/>
+        <UsageCount Value="55"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="unsiimageprocessingtypes.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="unSiImageProcessingTypes"/>
-        <EditorIndex Value="1"/>
+        <EditorIndex Value="2"/>
         <CursorPos X="22" Y="8"/>
-        <UsageCount Value="22"/>
+        <UsageCount Value="52"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="unsitrigonometry.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="unSiTrigonometry"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="44"/>
+        <CursorPos X="53" Y="54"/>
+        <UsageCount Value="50"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -52,152 +63,152 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="15"/>
         <CursorPos X="3" Y="32"/>
-        <UsageCount Value="18"/>
+        <UsageCount Value="15"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\inc\mathh.inc"/>
-        <EditorIndex Value="5"/>
-        <TopLine Value="46"/>
-        <CursorPos X="14" Y="108"/>
-        <UsageCount Value="17"/>
+        <EditorIndex Value="6"/>
+        <TopLine Value="95"/>
+        <CursorPos X="14" Y="112"/>
+        <UsageCount Value="32"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\lcl\lcltype.pp"/>
         <UnitName Value="LCLType"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="5"/>
         <TopLine Value="1308"/>
         <CursorPos X="27" Y="1326"/>
-        <UsageCount Value="17"/>
+        <UsageCount Value="32"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="..\..\..\..\AppData\Local\Temp\Temp1_G32_WConvolution.zip\G32_WConvolution.pas"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="1356"/>
-        <UsageCount Value="8"/>
+        <UsageCount Value="5"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
       <Position>
-        <Filename Value="frmimageprocess.pas"/>
-        <Caret Line="46" Column="110" TopLine="30"/>
+        <Filename Value="unsitrigonometry.pas"/>
+        <Caret Line="68" TopLine="47"/>
       </Position>
       <Position>
-        <Filename Value="unthreadrotation.pas"/>
-        <Caret Line="16" Column="95"/>
+        <Filename Value="unsitrigonometry.pas"/>
+        <Caret Line="69" TopLine="47"/>
       </Position>
       <Position>
-        <Filename Value="unthreadrotation.pas"/>
-        <Caret Line="22" Column="33" TopLine="10"/>
+        <Filename Value="unsitrigonometry.pas"/>
+        <Caret Line="70" TopLine="47"/>
       </Position>
       <Position>
-        <Filename Value="frmimageprocess.pas"/>
-        <Caret Line="190" Column="33" TopLine="175"/>
+        <Filename Value="unsitrigonometry.pas"/>
+        <Caret Line="66" TopLine="47"/>
       </Position>
       <Position>
-        <Filename Value="unthreadrotation.pas"/>
-        <Caret Line="34" Column="28" TopLine="17"/>
+        <Filename Value="unsitrigonometry.pas"/>
+        <Caret Line="68" TopLine="47"/>
       </Position>
       <Position>
-        <Filename Value="unsiimageprocessingtypes.pas"/>
-        <Caret Line="8" Column="22"/>
+        <Filename Value="unsitrigonometry.pas"/>
+        <Caret Line="69" TopLine="47"/>
       </Position>
       <Position>
-        <Filename Value="frmimageprocess.pas"/>
-        <Caret Line="45" Column="24" TopLine="26"/>
+        <Filename Value="unsitrigonometry.pas"/>
+        <Caret Line="70" TopLine="47"/>
       </Position>
       <Position>
-        <Filename Value="unthreadrotation.pas"/>
-        <Caret Line="8" Column="30"/>
+        <Filename Value="unsitrigonometry.pas"/>
+        <Caret Line="66" TopLine="47"/>
       </Position>
       <Position>
-        <Filename Value="unthreadrotation.pas"/>
-        <Caret Line="40" Column="15" TopLine="23"/>
+        <Filename Value="unsitrigonometry.pas"/>
+        <Caret Line="68" TopLine="47"/>
       </Position>
       <Position>
-        <Filename Value="unthreadrotation.pas"/>
-        <Caret Line="46" Column="26" TopLine="25"/>
+        <Filename Value="unsitrigonometry.pas"/>
+        <Caret Line="69" TopLine="47"/>
       </Position>
       <Position>
-        <Filename Value="unthreadrotation.pas"/>
-        <Caret Line="39" Column="18" TopLine="33"/>
+        <Filename Value="unsitrigonometry.pas"/>
+        <Caret Line="70" TopLine="47"/>
       </Position>
       <Position>
-        <Filename Value="unthreadrotation.pas"/>
-        <Caret Line="74" Column="57" TopLine="65"/>
+        <Filename Value="unsitrigonometry.pas"/>
+        <Caret Line="66" TopLine="47"/>
       </Position>
       <Position>
-        <Filename Value="unthreadrotation.pas"/>
-        <Caret Line="40" Column="26" TopLine="26"/>
+        <Filename Value="unsitrigonometry.pas"/>
+        <Caret Line="68" TopLine="47"/>
       </Position>
       <Position>
-        <Filename Value="unthreadrotation.pas"/>
-        <Caret Line="74" Column="66" TopLine="56"/>
+        <Filename Value="unsitrigonometry.pas"/>
+        <Caret Line="69" TopLine="47"/>
       </Position>
       <Position>
-        <Filename Value="unthreadrotation.pas"/>
-        <Caret Line="34" Column="34" TopLine="15"/>
+        <Filename Value="unsitrigonometry.pas"/>
+        <Caret Line="70" TopLine="47"/>
       </Position>
       <Position>
-        <Filename Value="unthreadrotation.pas"/>
-        <Caret Line="80" Column="36" TopLine="60"/>
+        <Filename Value="unsitrigonometry.pas"/>
+        <Caret Line="66" TopLine="47"/>
       </Position>
       <Position>
-        <Filename Value="unthreadrotation.pas"/>
-        <Caret Line="86" TopLine="21"/>
+        <Filename Value="unsitrigonometry.pas"/>
+        <Caret Line="68" TopLine="47"/>
       </Position>
       <Position>
-        <Filename Value="unthreadrotation.pas"/>
-        <Caret Line="23" Column="20"/>
+        <Filename Value="unsitrigonometry.pas"/>
+        <Caret Line="69" TopLine="47"/>
       </Position>
       <Position>
-        <Filename Value="unthreadrotation.pas"/>
-        <Caret Line="93" Column="26" TopLine="7"/>
+        <Filename Value="unsitrigonometry.pas"/>
+        <Caret Line="70" TopLine="47"/>
       </Position>
       <Position>
-        <Filename Value="unthreadrotation.pas"/>
-        <Caret Line="74" Column="43" TopLine="60"/>
+        <Filename Value="unsitrigonometry.pas"/>
+        <Caret Line="66" TopLine="47"/>
       </Position>
       <Position>
-        <Filename Value="frmimageprocess.pas"/>
-        <Caret Line="201" Column="70" TopLine="170"/>
+        <Filename Value="unsitrigonometry.pas"/>
+        <Caret Line="70" Column="11" TopLine="47"/>
       </Position>
       <Position>
-        <Filename Value="frmimageprocess.pas"/>
-        <Caret Line="202" Column="70" TopLine="171"/>
+        <Filename Value="unsitrigonometry.pas"/>
+        <Caret Line="68" Column="39" TopLine="47"/>
       </Position>
       <Position>
-        <Filename Value="frmimageprocess.pas"/>
-        <Caret Line="204" Column="70" TopLine="173"/>
+        <Filename Value="unsitrigonometry.pas"/>
+        <Caret Line="69" TopLine="47"/>
       </Position>
       <Position>
-        <Filename Value="frmimageprocess.pas"/>
-        <Caret Line="261" Column="87" TopLine="239"/>
-      </Position>
-      <Position>
-        <Filename Value="frmimageprocess.pas"/>
-        <Caret Line="258" Column="18" TopLine="226"/>
+        <Filename Value="unsitrigonometry.pas"/>
+        <Caret Line="91" Column="18" TopLine="65"/>
       </Position>
       <Position>
         <Filename Value="frmimageprocess.pas"/>
-        <Caret Line="272" Column="3" TopLine="270"/>
+        <Caret Line="146" Column="52" TopLine="127"/>
+      </Position>
+      <Position>
+        <Filename Value="unsitrigonometry.pas"/>
+        <Caret Line="95" Column="7" TopLine="75"/>
+      </Position>
+      <Position>
+        <Filename Value="unsitrigonometry.pas"/>
+        <Caret Line="97" Column="4" TopLine="80"/>
+      </Position>
+      <Position>
+        <Filename Value="unsitrigonometry.pas"/>
+        <Caret Line="42" Column="63" TopLine="19"/>
+      </Position>
+      <Position>
+        <Filename Value="unsitrigonometry.pas"/>
+        <Caret Line="61" Column="37" TopLine="44"/>
       </Position>
       <Position>
         <Filename Value="frmimageprocess.pas"/>
-        <Caret Line="105" Column="3" TopLine="96"/>
-      </Position>
-      <Position>
-        <Filename Value="frmimageprocess.pas"/>
-        <Caret Line="104" Column="3" TopLine="95"/>
-      </Position>
-      <Position>
-        <Filename Value="frmimageprocess.pas"/>
-        <Caret Line="107" Column="113" TopLine="68"/>
-      </Position>
-      <Position>
-        <Filename Value="frmimageprocess.pas"/>
-        <Caret Line="106" Column="113" TopLine="73"/>
+        <Caret Line="230" Column="50" TopLine="215"/>
       </Position>
     </JumpHistory>
     <RunParams>
@@ -205,4 +216,14 @@
       <Modes ActiveMode=""/>
     </RunParams>
   </ProjectSession>
+  <Debugging>
+    <Watches>
+      <Item>
+        <Expression Value="dAngle"/>
+      </Item>
+      <Item>
+        <Expression Value="FdSineLookupTable[I-1]"/>
+      </Item>
+    </Watches>
+  </Debugging>
 </CONFIG>

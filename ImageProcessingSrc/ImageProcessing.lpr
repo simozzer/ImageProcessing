@@ -10,14 +10,14 @@ uses
   athreads,
   {$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, frmImageProcess, unThreadRotation, unSiImageProcessingTypes
+  Forms, frmImageProcess, unThreadRotation, unSiImageProcessingTypes,
+unSiTrigonometry
   { you can add units after this };
 
 {$R *.res}
 
 begin
   RequireDerivedFormResource:=True;
-  Application.Title:='Si Image Processing';
   Application.Scaled:=True;
   Application.Initialize;
   Application.CreateForm(TForm1, Form1);

@@ -52,6 +52,11 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="unSiImageProcessingTypes"/>
       </Unit>
+      <Unit>
+        <Filename Value="unsitrigonometry.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="unSiTrigonometry"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

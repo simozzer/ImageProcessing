@@ -40,6 +40,7 @@ type
     procedure actToggleRotationExecute(Sender: TObject);
     procedure btnOpenImageClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure Image1Click(Sender: TObject);
   private
     FOrigBitmap: TBitmap;
     FdRotation: double;
@@ -57,7 +58,7 @@ var
 implementation
 
 uses
-  Types, unSiImageProcessingTypes, unThreadRotation;
+  Types, unSiImageProcessingTypes, unThreadRotation, unSiTrigonometry;
 
 {$R *.lfm}
 
@@ -141,8 +142,8 @@ begin
         else if (iDeltax > 0) and (iDeltaY > 0) then
           dAngle := ArcTan(iDeltaY / iDeltax);
 
-        iSourceX := Round(dRadius * cos(dAngle - FdRotation)) + iCenterX;
-        iSourceY := Round(dRadius * sin(dAngle - FdRotation)) + iCenterY;
+        iSourceX := Round(dRadius * TSiTrig.getCosine(dAngle - FdRotation)) + iCenterX;
+        iSourceY := Round(dRadius * TSiTrig.GetSine(dAngle - FdRotation)) + iCenterY;
 
 
         if PtInRect(Rect(0, 0, ABitmap.Width, ABitmap.Height),
@@ -165,10 +166,8 @@ end;
 
 procedure TForm1.actThreadedRotateExecute(Sender: TObject);
 var
-  iX, iY, iCenterX, iCenterY, iSourceX, iSourceY, iDeltaX, iDeltaY: integer;
+  iY, iCenterX, iCenterY: integer;
   ABitmap, ASourceBitmap: TBitmap;
-  pSourceLine, pTargetLine: PRGBTripleArray;
-  dRadius, dAngle: double;
 const
   ROTATION = 0.03;
 begin
@@ -182,9 +181,10 @@ begin
   ABitmap.PixelFormat := ASourceBitmap.PixelFormat;
   try
     FdRotation:=  FdRotation + ROTATION;
-    for iY := 0 to pred(ASourceBitmap.Height) do
+    for iY := 0 to 7 do
     begin
-      TRotationThread.Create(ASourceBitmap,ABitmap, iCenterX, iCenterY, iY, FdRotation);
+      TRotationThread.Create(ASourceBitmap,ABitmap, iCenterX, iCenterY, iY, FdRotation, Self.Handle);
+
     end;
     Image1.Picture.Pixmap.Canvas.Draw(0, 0, ABitmap);
   finally
@@ -321,6 +321,11 @@ end;
 procedure TForm1.FormCreate(Sender: TObject);
 begin
   FOrigBitmap := TBitmap.Create;
+end;
+
+procedure TForm1.Image1Click(Sender: TObject);
+begin
+
 end;
 
 
