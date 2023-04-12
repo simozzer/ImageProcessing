@@ -5,12 +5,12 @@ unit unSiTrigonometry;
 interface
 
 uses
-  Classes, SysUtils;
+  Classes, SysUtils, unSiImageProcessingTypes;
 
 const
-  MAX_ENTRIES = 36000;
-  TWO_PI: Double = 2 * pi;
-  LOOKUP_INC: DOUBLE = (2 * pi) / MAX_ENTRIES;
+  MAX_ENTRIES = 3600;
+  TWO_PI: TSiFloat = 2 * pi;
+  LOOKUP_INC: TSiFloat = (2 * pi) / MAX_ENTRIES;
   LOOKUP_FACTOR: Double = MAX_ENTRIES / ( 2 * pi);
 
 type
@@ -21,15 +21,15 @@ type
 
   TSiFastTrig = class
   private
-    FdSineLookupTable: array [0..MAX_ENTRIES] of double;
-    FdCosineLookupTable: array [0..MAX_ENTRIES] of double;
+    FdSineLookupTable: array [0..MAX_ENTRIES] of TSiFloat;
+    FdCosineLookupTable: array [0..MAX_ENTRIES] of TSiFloat;
     procedure BuildLookups;
-    function ForceRange(const dAngle: Double): Double;
-    function GetSine(const dAngle: Double): Double;
-    function GetCosine(const dAngle: Double): Double;
+    function ForceRange(const dAngle: TSiFloat): TSiFloat;
+    function GetSine(const dAngle: TSiFloat): TSiFloat;
+    function GetCosine(const dAngle: TSiFloat): TSiFloat;
   public
-    property Sine[const index: Double]: Double read GetSine;
-    property Cosine[const index: Double]: double read GetCosine;
+    property Sine[const index: TSiFloat]: TSiFloat read GetSine;
+    property Cosine[const index: TSiFloat]: TSiFloat read GetCosine;
     constructor Create;
   end;
 
@@ -38,8 +38,8 @@ type
 
   TSiTrig = class
     public
-      class function GetSine(const index : Double): Double;
-      class function getCosine(const iIndex : Double): Double;
+      class function GetSine(const index : TSiFloat): TSiFloat;
+      class function getCosine(const iIndex : TSiFloat): TSiFloat;
   end;
 
 implementation
@@ -51,12 +51,12 @@ var
 
 { TSiTrig }
 
-class function TSiTrig.GetSine(const index: Double): Double;
+class function TSiTrig.GetSine(const index: TSiFloat): TSiFloat;
 begin
   RESULT := FFastTrig.Sine[index];
 end;
 
-class function TSiTrig.getCosine(const iIndex: Double): Double;
+class function TSiTrig.getCosine(const iIndex: TSiFloat): TSiFloat;
 begin
   RESULT := FFastTrig.Cosine[iIndex];
 end;
@@ -66,7 +66,7 @@ end;
 procedure TSiFastTrig.BuildLookups;
 var
   i : Integer;
-  dAngle : Double;
+  dAngle : TSiFloat;
 begin
   dAngle := 0.0;
   for i := 0 to pred(MAX_ENTRIES) do
@@ -77,9 +77,9 @@ begin
   end;
 end;
 
-function TSiFastTrig.ForceRange(const dAngle: Double): Double;
+function TSiFastTrig.ForceRange(const dAngle: TSiFloat): TSiFloat;
 var
-  dReturnAngle: Double;
+  dReturnAngle: TSiFloat;
 begin
   dReturnAngle := dAngle;
   while (dReturnAngle > TWO_PI) do
@@ -93,15 +93,13 @@ begin
   RESULT := dReturnAngle;
 end;
 
-function TSiFastTrig.GetSine(const dAngle: Double): Double;
+function TSiFastTrig.GetSine(const dAngle: TSiFloat): TSiFloat;
 begin
-  // TODO ... do not exceed 2* pi!
   RESULT := FdSineLookupTable[round(LOOKUP_FACTOR * ForceRange(dAngle))];
 end;
 
-function TSiFastTrig.GetCosine(const dAngle: Double): Double;
+function TSiFastTrig.GetCosine(const dAngle: TSiFloat): TSiFloat;
 begin
-    // TODO ... do not exceed 2* pi!
   RESULT := FdCosineLookupTable[round(LOOKUP_FACTOR * ForceRange(dAngle))];
 end;
 

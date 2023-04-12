@@ -12,6 +12,8 @@ TSiRGB = packed record
   B, G, R, A: byte;
 end;
 
+TSiFloat = single;
+
 PSiRGB = ^TSiRGB;
 
 TRGBTripleArray = array[0..4095] of TSiRGB;

@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, StdCtrls,
-  ExtDlgs, LclType, ActnList;
+  ExtDlgs, LclType, ActnList, unSiImageProcessingTypes;
 
 type
 
@@ -42,7 +42,8 @@ type
     procedure FormCreate(Sender: TObject);
   private
     FOrigBitmap, FBackBitmap: TBitmap;
-    FdRotation: double;
+    FdRotation: TSiFloat;
+    procedure IncreaseRotation(const dAngle : TSiFloat);
   public
     procedure AfterConstruction; override;
     destructor Destroy; override;
@@ -57,9 +58,12 @@ var
 implementation
 
 uses
-  Types, unSiImageProcessingTypes, unThreadRotation, unSiTrigonometry;
+  Types, unThreadRotation, unSiTrigonometry;
 
 {$R *.lfm}
+
+const
+  TWO_PI = Pi * 2;
 
 
 { TForm1 }
@@ -96,11 +100,11 @@ var
   iX, iY, iCenterX, iCenterY, iSourceX, iSourceY, iDeltaX, iDeltaY: integer;
   ASourceBitmap: TBitmap;
   pSourceLine, pTargetLine: PRGBTripleArray;
-  dRadius, dAngle: double;
+  dRadius, dAngle: TSiFloat;
 const
-  ROTATION = 0.03;
+  ROTATION = 0.01;
 begin
-  FdRotation := FdRotation + ROTATION;
+  IncreaseRotation(ROTATION);
   ASourceBitmap := FOrigBitmap;
   iCenterX := ASourceBitmap.Width div 2;
   iCenterY := ASourceBitmap.Height div 2;
@@ -173,10 +177,10 @@ var
 const
   ROTATION = 0.03;
 begin
-  FdRotation := FdRotation + ROTATION;
+  IncreaseRotation(ROTATION);
   ASourceBitmap := FOrigBitmap;
-  iCenterX := ASourceBitmap.Width div 2;
-  iCenterY := ASourceBitmap.Height div 2;
+  iCenterX := round(ASourceBitmap.Width / 3.5);
+  iCenterY := round(ASourceBitmap.Height / 5);
   if FBackBitmap = nil then
   begin
     FBackBitmap := TBitmap.Create;
@@ -217,7 +221,7 @@ end;
 procedure TForm1.actBlurExecute(Sender: TObject);
 var
   iX, iY, iAvg: integer;
-  dConvColor: double;
+  dConvColor: TSiFloat;
   ABitmap: TBitmap;
   AImageBitmap: TBitmap;
   pThisLine, pPriorLine, pNextLine, pTargetLine: PRGBTripleArray;
@@ -263,7 +267,7 @@ end;
 procedure TForm1.actEdgeExecute(Sender: TObject);
 var
   iX, iY, iAvg: integer;
-  dConvColorX, dConvColorY, dConvColor: double;
+  dConvColorX, dConvColorY, dConvColor: TSiFloat;
   ABitmap: TBitmap;
   AImageBitmap: TBitmap;
   pThisLine, pPriorLine, pNextLine, pTargetLine: PRGBTripleArray;
@@ -327,6 +331,19 @@ procedure TForm1.FormCreate(Sender: TObject);
 begin
   FOrigBitmap := TBitmap.Create;
   FBackBitmap := nil;
+end;
+
+procedure TForm1.IncreaseRotation(const dAngle: TSiFloat);
+begin
+  FdRotation := FdRotation + dAngle;
+  while (FdRotation > TWO_PI) do
+  begin
+    FdRotation -= TWO_PI;
+  end;
+  while (FdRotation < 0) do
+  begin
+    FdRotation += TWO_PI;
+  end;
 end;
 
 

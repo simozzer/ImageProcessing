@@ -5,7 +5,7 @@ unit unThreadRotation;
 interface
 
 uses
-  Classes, SysUtils, Graphics;
+  Classes, SysUtils, Graphics, unSiImageProcessingTypes;
 
 type
 
@@ -20,11 +20,11 @@ type
     FiLine: integer;
     FiWidth: integer;
     FiHeight: integer;
-    FdAngle: double;
+    FdAngle: TSiFloat;
     FMainThreadHandle: THandle;
   public
     constructor Create(ABmpSource, ABmpTarget: TBitmap; iCx, iCy, iLine: integer;
-      dAngle: double; MainThreadHandle: THandle);
+      dAngle: TSiFloat; MainThreadHandle: THandle);
     procedure Execute; override;
   end;
 
@@ -33,12 +33,12 @@ implementation
 { TRotationThread }
 
 uses
-  unSiImageProcessingTypes, Types, unSiTrigonometry;
+  Types, unSiTrigonometry;
 
 procedure TRotationThread.Execute;
 var
   iX, iDeltaX, iDeltaY, iSourceX, iSourceY: integer;
-  dRadius, dAngle: double;
+  dRadius, dAngle: TSiFloat;
   pTargetLine, pSourceLine: PRGBTripleArray;
   iLine: integer;
 begin
@@ -96,7 +96,7 @@ begin
 end;
 
 constructor TRotationThread.Create(ABmpSource, ABmpTarget: TBitmap;
-  iCx, iCy, iLine: integer; dAngle: double; MainThreadHandle: THandle);
+  iCx, iCy, iLine: integer; dAngle: TSiFloat; MainThreadHandle: THandle);
 begin
   inherited Create(True);
   FreeOnTerminate := True;
