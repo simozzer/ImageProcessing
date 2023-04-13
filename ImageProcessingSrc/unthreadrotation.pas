@@ -38,7 +38,6 @@ uses
 procedure TRotationThread.Execute;
 var
   iX, iDeltaX, iDeltaY, iSourceX, iSourceY: integer;
-  dRadius, dAngle: TSiFloat;
   pTargetLine, pSourceLine: PRGBTripleArray;
   iLine: integer;
 begin
@@ -52,34 +51,11 @@ begin
 
       iDeltaX := iX - FiCx;
       iDeltaY := iLine - FiCy;
-      dRadius := Sqrt(sqr(iDeltaX) + Sqr(iDeltaY));
+      iSourceX := FiCx + Round((iDeltaX * TSiTrig.getCosine(FdAngle)) -
+        (iDeltaY * TSiTrig.getSine(FdAngle)));
 
-      if (iDeltaX = 0) then
-      begin
-        if (iDeltaY < 0) then
-          dAngle := -pi / 2
-        else if (iDeltaY > 0) then
-          dAngle := pi / 2;
-      end
-      else if (iDeltaY = 0) then
-      begin
-        if (iDeltaX < 0) then
-          dAngle := pi
-        else if (iDeltaX > 0) then
-          dAngle := 0;
-      end
-      else if (iDeltaX < 0) and (iDeltaY < 0) then
-        dAngle := pi + ArcTan(iDeltaY / iDeltaX)
-      else if (iDeltaX > 0) and (iDeltaY < 0) then
-        dAngle := -((pi / 2) + ArcTan(iDeltaX / iDeltaY))
-      else if (iDeltaX < 0) and (iDeltaY > 0) then
-        dAngle := pi + ArcTan(iDeltaY / iDeltaX)
-      else if (iDeltax > 0) and (iDeltaY > 0) then
-        dAngle := ArcTan(iDeltaY / iDeltax);
-
-      iSourceX := Round(dRadius * TSiTrig.getCosine(dAngle - FdAngle)) + FiCx;
-      iSourceY := Round(dRadius * TSiTrig.getSine(dAngle - FdAngle)) + FiCy;
-
+      iSourceY := FiCy + Round((iDeltaX * TSiTrig.GetSine(FdAngle)) +
+        (iDeltaY * TSiTrig.getCosine(FdAngle)));
 
       if PtInRect(Rect(0, 0, FiWidth, FiHeight),
         Point(round(iSourceX), round(iSourceY))) then
@@ -90,9 +66,9 @@ begin
         pTargetLine^[round(iX)].B := pSourceLine^[iSourceX].B;
       end;
     end;
-    iLine += 8;
+    iLine += 16;
   end;
-
+  Terminate;
 end;
 
 constructor TRotationThread.Create(ABmpSource, ABmpTarget: TBitmap;

@@ -43,7 +43,7 @@ type
   private
     FOrigBitmap, FBackBitmap: TBitmap;
     FdRotation: TSiFloat;
-    procedure IncreaseRotation(const dAngle : TSiFloat);
+    procedure IncreaseRotation(const dAngle: TSiFloat);
   public
     procedure AfterConstruction; override;
     destructor Destroy; override;
@@ -100,7 +100,6 @@ var
   iX, iY, iCenterX, iCenterY, iSourceX, iSourceY, iDeltaX, iDeltaY: integer;
   ASourceBitmap: TBitmap;
   pSourceLine, pTargetLine: PRGBTripleArray;
-  dRadius, dAngle: TSiFloat;
 const
   ROTATION = 0.01;
 begin
@@ -118,7 +117,6 @@ begin
   FBackBitmap.Height := ASourceBitmap.Height;
   FBackBitmap.PixelFormat := ASourceBitmap.PixelFormat;
 
-
   for iY := 0 to pred(ASourceBitmap.Height) do
   begin
     pTargetLine := FBackBitmap.ScanLine[iY];
@@ -126,34 +124,12 @@ begin
     begin
       iDeltaX := iX - iCenterX;
       iDeltaY := iY - iCenterY;
-      dRadius := Sqrt(sqr(iDeltaX) + Sqr(iDeltaY));
 
-      if (iDeltaX = 0) then
-      begin
-        if (iDeltaY < 0) then
-          dAngle := -pi / 2
-        else if (iDeltaY > 0) then
-          dAngle := pi / 2;
-      end
-      else if (iDeltaY = 0) then
-      begin
-        if (iDeltaX < 0) then
-          dAngle := pi
-        else if (iDeltaX > 0) then
-          dAngle := 0;
-      end
-      else if (iDeltaX < 0) and (iDeltaY < 0) then
-        dAngle := pi + ArcTan(iDeltaY / iDeltaX)
-      else if (iDeltaX > 0) and (iDeltaY < 0) then
-        dAngle := -((pi / 2) + ArcTan(iDeltaX / iDeltaY))
-      else if (iDeltaX < 0) and (iDeltaY > 0) then
-        dAngle := pi + ArcTan(iDeltaY / iDeltaX)
-      else if (iDeltax > 0) and (iDeltaY > 0) then
-        dAngle := ArcTan(iDeltaY / iDeltax);
+      iSourceX := iCenterX + Round((iDeltaX * TSiTrig.getCosine(FdRotation)) -
+        (iDeltaY * TSiTrig.getSine(FdRotation)));
 
-      iSourceX := Round(dRadius * TSiTrig.getCosine(dAngle - FdRotation)) + iCenterX;
-      iSourceY := Round(dRadius * TSiTrig.GetSine(dAngle - FdRotation)) + iCenterY;
-
+      iSourceY := iCenterY + Round((iDeltaX * TSiTrig.GetSine(FdRotation)) +
+        (iDeltaY * TSiTrig.getCosine(FdRotation)));
 
       if PtInRect(Rect(0, 0, FBackBitmap.Width, FBackBitmap.Height),
         Point(round(iSourceX), round(iSourceY))) then
@@ -192,7 +168,7 @@ begin
   FBackBitmap.PixelFormat := ASourceBitmap.PixelFormat;
 
   FdRotation := FdRotation + ROTATION;
-  for iY := 0 to 7 do
+  for iY := 0 to 16 do
   begin
     TRotationThread.Create(ASourceBitmap, FBackBitmap, iCenterX,
       iCenterY, iY, FdRotation, Self.Handle);

@@ -44,8 +44,6 @@ type
 
 implementation
 
-uses Math;
-
 var
   FFastTrig : TSiFastTrig;
 

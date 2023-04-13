@@ -2557,7 +2557,7 @@ object Form1: TForm1
   end
   object Timer1: TTimer
     Enabled = False
-    Interval = 1
+    Interval = 16
     OnTimer = actThreadedRotateExecute
     Left = 560
     Top = 296
